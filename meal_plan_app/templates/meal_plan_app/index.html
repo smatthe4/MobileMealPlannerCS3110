@@ -1,9 +1,174 @@
-<!-- inherit from base.html-->
-{% extends "meal_plan_app/base_template.html" %}
+<!DOCTYPE html> 
+
+<html> 
+
+<head> 
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+
+  
+
+  
+
+<style> 
+body { 
+
+  margin: 0; 
+
+  font-family: fantasy; 
+  background-color: #FFE9E3; 
+} 
+    .navbar { 
+
+        overflow: hidden; 
+
+        background-color:#FFAEAC; 
+
+  
+
+    } 
+    .navbar a{ 
+
+  float: left; 
+
+  color: #0F0F0F; 
+
+  text-align: center; 
+
+  padding: 24px 26px; 
+
+  text-decoration: none; 
+
+  font-size: 50px; 
+
+    } 
+    .navbarright a{ 
+
+  float: right; 
+
+  color: #0F0F0F; 
+
+  text-align: center; 
+
+  padding: 24px 26px; 
+
+  text-decoration: none; 
+
+  font-size: 50px; 
+
+    } 
+    
+    
+.box {
+  width: 400px;
+  height: 80px;
+  padding: 10px;
+  border: px black;
+  border-style: double;
+  margin: auto;
+  font-size: 35px; 
+  border-radius: 25px;
+  background-color: white;
+  color: #0F0F0F;
+}
+    
+    
+</style> 
+
+  
+
+</head> 
+
+<body> 
+
+<div class="navbar"> 
+
+  <a href="">College Meal Plan</a> <!-- ADD URL TO INDEX-->
+
+  <div class="navbarright"> 
+
+  <a href="">Login</a> <!-- ADD URL TO MEAL GENERATOR PAGE HERE-->
+
+</div> 
+
+</div> 
+
+<div style="text-align:center; font-size: 50px; padding-top:50px;  background-color: white; "> 
+
+    Number of Meals 
+
+</div> 
+
+<div style="padding-top:50px"> 
+</div> 
+
+<div> 
+
+    <select id='mealnum' name='mealnum' style="text-align:center; font-size: 50px; margin: 0 auto; display: block; "> 
+
+        <option value=1>1</option> 
+
+        <option value=2>2</option> 
+
+        <option value=3>3</option> 
+
+        <option value=4>4</option> 
+
+        <option value=5>5</option> 
+
+        <option value=6>6</option> 
+
+        <option value=7>7 (Week)</option> 
+
+    </select> 
+
+</div> 
+
+<div style="text-align:center; font-size: 50px; padding-top:50px overflow: hidden; "> 
 
 
-<!-- Replace block content in base_template.html -->
-{% block content %}
+
+</div> 
+
+<div style="padding-top:10px"> 
+
+</div> 
+
+<div> 
 
 
-{% endblock %}
+<div style="text-align:center; font-size: 40px;   background-color: white; ">
+	<p style="font-size: 50px;">Preferences<p>
+</div>
+<div class=box >
+  <input type="checkbox" id="vegetarian" name="vegetarian" value="vegetarian">
+  <label for="vegetarian"> Vegetarian</label><br>
+  <input type="checkbox" id="vegan" name="vegan" value="vegan">
+  <label for="vegan"> Vegan</label><br>
+  </div>
+</div> 
+
+<div style="padding-top:50px"> 
+</div> 
+
+
+<div style="text-align:center; font-size: 40px;   ">
+<a href=""> <!-- ADD URL TO MEAL GENERATOR PAGE HERE-->
+<button style="font-size: 70px; width:250px; height:100px; text-align:center; background-color: white; ">GO</button>
+</a>
+</div>
+
+
+
+
+</body> 
+
+  
+
+  
+
+  
+
+</html> 
+
+ 
