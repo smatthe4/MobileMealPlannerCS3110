@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from collections import defaultdict
 
-"""
+
 class MealPlan(models.Model):
     title = models.CharField(max_length=100)
     meals = models.ManyToManyField('Meal')
@@ -56,4 +56,3 @@ class UserProfile(models.Model):
     
     def __str__(self):
         return f"Profile for {self.user.username}"
-"""

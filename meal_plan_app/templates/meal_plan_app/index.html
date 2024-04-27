@@ -135,6 +135,55 @@ body {
 </div> 
 
 <div> 
+<!-- Replace block content in base_template.html -->
+{% block content %}
+    
+        <h1>Random Meal Generator</h1>
+        <h2>Press the "RMG" button and instantly get a random dish to cook and cocktail to mix! If you like it, you can
+            save it.</h2>
+        <div class='button-container buttons are-medium'>
+            <button class="button rmg-button is-warning is-light">RMG!</button>
+            <button class="button save-button is-danger is-light hidden">Favorite</button>
+            <button class="button clear-button is-info is-light hidden">Clear Fav</button>
+        </div>
+    
+
+    <main class="container hidden">
+        <div class="columns">
+            <section class="column recipe-card meal-container card">
+                <h3 class="meal-name"></h3>
+                <div class="hero-foot">
+                    <nav class="tabs is-boxed is-fullwidth is-medium">
+                        <div class="container">
+                            <ul id="meal-ul">
+                                <li class="meal-tab is-active" onclick="openTab(event,'meal-img')">
+                                    <a>Image</a>
+                                </li>
+                                <li class="meal-tab" onclick="openTab(event,'meal-ingredients')">
+                                    <a>Ingredients</a>
+                                </li>
+                                <li class="meal-tab" onclick="openTab(event,'meal-instructions')">
+                                    <a>Instructions</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+                <div class="">
+                    <a id="meal-img" class="meal-link meal-content-tab" href="" target="_blank">
+                        <img class="meal-img" src="" alt="" />
+                    </a>
+                    <ul id="meal-ingredients" class="meal-ingredients meal-content-tab content-text hidden">
+
+                    </ul>
+                    <p id="meal-instructions" class="meal-instructions meal-content-tab content-text hidden"></p>
+                </div>
+            </section>
+        </div>
+
+    </main>
+    
+<script src="static/js/mp_script.js"></script>
 
 
 <div style="text-align:center; font-size: 40px;   background-color: white; ">
