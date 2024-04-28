@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
@@ -8,4 +8,12 @@ urlpatterns = [
     # name='index' parameter is to dynamically create url
     # example in html <a href="{% url 'index' %}">Home</a>.
     path('', views.index, name='index'),
+    path('mealist/', views.mealist, name='mealist'),
+
+
+    #user accounts
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/register', views.registerPage, name = 'register-page'),
+    path('accounts/logout', views.logoutView, name='logout'),
+    path('user/', views.userPage, name='user_page'),
 ]
