@@ -11,21 +11,17 @@
 <ul>
     <h1>Meal Plan</h1>
     {% if meal_plan %}
-        {% for day, meals in meal_plan.meal %}
+        {% for meals in meal_plan.meal.all %}
             <h2>Day {{ day }}</h2>
             <ul>
-                {% for meal in meals %}
-                    <li>{{ meals.name }}</li>
-                {% endfor %}
+                <li>{{ meals.name }}</li>
             </ul>
         {% endfor %}
 
-        {% for day, meals in meal_plan.crazy_meal %}
+        {% for meals in meal_plan.crazy_meal.all %}
             <h2>Day {{ day }}</h2>
             <ul>
-                {% for meals in meals %}
-                    <li>{{ meal.name }}</li>
-                {% endfor %}
+                <li>{{ meals.name }}</li>
             </ul>
         {% endfor %}
 
