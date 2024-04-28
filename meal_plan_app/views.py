@@ -8,48 +8,80 @@ from .models import *
 from .forms import *
 from django.contrib import messages
 from django.http import JsonResponse
-import requests
+import requests, random
 
 
 
 
 # Create your views here.
 def index(request):
-    return render(request, 'meal_plan_app/index.html')
+    form = MealPlanInfoForm()
+    return render(request, 'meal_plan_app/index.html', {'form': form})
 
-def mealist(request):
+
+def meal_list(request):
     if request.method == 'POST':
-        # Get user input from the form
-        num_meals = int(request.POST.get('num_meals', 1))  # Default to 1 if not specified
-        category = request.POST.get('category')
+        form = MealPlanInfoForm(request.POST)
+    
+        if form.is_valid():
+            go_crazy = form.cleaned_data['go_crazy']
+            num_meals = form.cleaned_data['num_meals']
+            category = form.cleaned_data['category']
 
-        # URL of the MealDB API endpoint to fetch random meals by category
-        api_url = f'https://www.themealdb.com/api/json/v1/1/filter.php?c={category}'
+            
+            if go_crazy:
+                crazy_meals = []
+                for _ in range(num_meals):
+                    try:
+                        # Make GET request to the API endpoint
+                        response = requests.get('https://www.themealdb.com/api/json/v1/1/random.php')
+                        # Check if request was successful (status code 200)
+                        if response.status_code == 200:
+                            # Parse JSON response
+                            data = response.json()
+                            # Extract meal data
+                            meal_data = data['meals'][0]  # Assuming the response contains meal data
+                            # Create CrazyMeal instance
+                            crazy_meal = CrazyMeal.objects.create(
+                                id_meal=meal_data['idMeal'],
+                                name=meal_data['strMeal'],
+                                category=meal_data['strCategory'],
+                                instructions=meal_data['strInstructions'],
+                                source_url=meal_data['strSource']
+                            )
+                            crazy_meals.append(crazy_meal)
+                        else:
+                            # Return error response if request was not successful
+                            return JsonResponse({'error': 'Failed to fetch data from API'}, status=500)
+                    except Exception as e:
+                        # Return error response if an exception occurs
+                        return JsonResponse({'error': str(e)}, status=500)
+                
+                # Create a meal plan instance
+                meal_plan = MealPlan.objects.create()
+                meal_plan.crazy_meal.add(*crazy_meals)
+                
+            else:
+                # Retrieve meals from the database based on the selected category
+                meals = Meal.objects.filter(meal_type=category)
+                selected_meals = random.sample(list(meals), min(num_meals, len(meals)))
+                
+                # Create a meal plan instance
+                meal_plan = MealPlan.objects.create()
+                meal_plan.meal.add(*selected_meals)
 
-        try:
-            # Make a GET request to the API
-            response = requests.get(api_url)
-            # Check if the request was successful (status code 200)
-            if response.status_code == 200:
-                # Parse JSON response
-                data = response.json()
-                # Extract random meals from the response data
-                random_meals = data['meals'][:num_meals]  # Limit to the specified number of meals
-                # Create a new MealPlan object
-                meal_plan = MealPlan.objects.create(title=f"{num_meals} Random Meals - {category}")
-                # Iterate over the random meals and save them to the MealPlan
-                for meal_data in random_meals:
-                    # Create a new Meal object and fill its fields with the retrieved data
-                    meal = Meal.objects.create(
-                        id_meal=meal_data['idMeal'],
-                        name=meal_data['strMeal'],
-                        category=category,  # Use the specified category
-                        # Other fields...
-                    )
-                    # Add the meal to the MealPlan
-                    meal_plan.meals.add(meal)
-                # Return success response
-    return render(request, 'meal_plan_app/mealistwip.html')
+
+        # Optionally, associate the meal plan with the current user
+        if request.user.is_authenticated:
+            meal_plan.user = request.user
+            meal_plan.save()
+        # Render the generated meal plan
+        return render(request, 'meal_plan_app/meal_list.html', {'meal_plan': meal_plan})
+
+    else:
+        form = MealPlanInfoForm()
+    return render(request, 'meal_plan_app/index.html', {'form': form})
+
 
 
 def logoutView(request):

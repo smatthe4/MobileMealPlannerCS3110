@@ -5,6 +5,12 @@
 
 <!-- Replace block content in base_template.html -->
 {% block content %}
+    <!-- mealistwip.html -->
+    <form method="POST" action="{% url 'meal_list' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Generate Meal Plan</button>
+    </form>
 
   
 {% endblock %}

@@ -5,6 +5,31 @@ from django import forms
 from .models import UserProfile
 
 
+
+class MealPlanInfoForm(forms.Form):
+    num_meals = forms.IntegerField(label='Number of meals', initial=1, min_value=1, max_value=7)
+    category = forms.MultipleChoiceField(
+        label='Category',
+        choices=[
+            ('Vegetarian', 'Vegetarian'),
+            ('Vegan', 'Vegan'),
+            ('pescatarian', 'Pescatarian'),
+            ('gluten_free', 'Gluten-Free'),
+            ('dairy_free', 'Dairy-Free')
+        ],
+        required=False  # Make the field optional
+    )
+    go_crazy = forms.BooleanField(label='Go Crazy!', required=False)
+
+
+    widgets = {
+        'num_meals': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Number of meals'}),
+        'category': forms.CheckboxSelectMultiple(attrs={'class': 'form-control'}),
+        'go_crazy': forms.CheckboxInput(attrs={'class': 'form-control'}),
+    }
+
+
+
 class UserProfileForm(ModelForm):
     class Meta:
         model = UserProfile

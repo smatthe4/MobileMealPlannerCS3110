@@ -1,0 +1,39 @@
+<!-- inherit from base.html-->
+{% extends "meal_plan_app/base_template.html" %}
+{% load static %}
+{% load bootstrap5 %}
+
+<!-- Replace block content in base_template.html -->
+{% block content %}
+
+<!-- meal_plan_detail.html -->
+<h1>Generated Meal Plan</h1>
+<ul>
+    <h1>Meal Plan</h1>
+    {% if meal_plan %}
+        {% for day, meals in meal_plan.meal %}
+            <h2>Day {{ day }}</h2>
+            <ul>
+                {% for meal in meals %}
+                    <li>{{ meals.name }}</li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+
+        {% for day, meals in meal_plan.crazy_meal %}
+            <h2>Day {{ day }}</h2>
+            <ul>
+                {% for meals in meals %}
+                    <li>{{ meal.name }}</li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+
+    {% else %}
+        <p>No meal plan available.</p>
+    {% endif %}
+</ul>
+
+
+  
+{% endblock %}

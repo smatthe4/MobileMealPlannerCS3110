@@ -8,8 +8,8 @@ from django.utils import timezone
 
 class MealPlan(models.Model):
     title = models.DateField(default = timezone.now)
-    meals = models.ManyToManyField('Meals', null=True, blank=True)
-    crazy_meals = models.ManyToManyField('Crazy Meals', null=True, blank=True, related_name='crazy_meals')
+    meal = models.ManyToManyField('Meal')
+    crazy_meal = models.ManyToManyField('CrazyMeal')
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
 
 
@@ -39,10 +39,20 @@ class MealPlan(models.Model):
     
 
 class Meal(models.Model):
+
+
+    FOOD_PREFRENCES = [
+        ('vegan', 'Vegan'),
+        ('vegetarian', 'Vegetarian'),
+        ('pescatarian', 'Pescatarian'),
+        ('gluten_free', 'Gluten-Free'),
+        ('dairy_free', 'Dairy-Free'),
+    ]
     title = models.CharField(max_length=100)
-    ingredients = models.TextField()  # Change this to a JSONField? for structured data
+    ingredients = models.TextField()  
     instructions = models.TextField()
-    meal_type = models.CharField(max_length=100)
+    food_preferences = MultiSelectField(choices=FOOD_PREFRENCES,max_length=12, null=True, blank=True)
+
 
     def get_absolute_url(self):
         return reverse("meal_plan_detail", kwargs={"pk": self.pk})
