@@ -19,7 +19,7 @@ class Profile(models.Model):
     ]
 
     food_preferences = MultiSelectField(choices=FOOD_PREFRENCES, max_length=55, null=True, blank=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)    
+    user = models.OneToOneField(User, on_delete=models.CASCADE)     
 
 
     def get_absolute_url(self):
@@ -43,6 +43,7 @@ class Meal(models.Model):
     ]
     title = models.CharField(max_length=100)
     ingredients = models.TextField()  
+    ingredient_amount = models.TextField(null=True)
     instructions = models.TextField()
     food_preferences = MultiSelectField(choices=FOOD_PREFRENCES,max_length=55, null=True, blank=True)
 
@@ -60,6 +61,8 @@ class CrazyMeal(models.Model):
     id_meal = models.CharField(max_length=10, unique=True)
     name = models.CharField(max_length=255)
     category = models.CharField(max_length=255)
+    ingredients = models.TextField()
+    ingredient_amount = models.TextField()
     instructions = models.TextField()
     source_url = models.URLField()
 
@@ -75,21 +78,31 @@ class MealPlan(models.Model):
 
 
     def get_unique_ingredients(self):
-        unique_ingredients = defaultdict(float)  # Use defaultdict to automatically initialize ingredient quantities to zero
+        unique_ingredients = {}
+        
+        # Loop through meals and add ingredients
+        for meal in self.meal.all():
+            for ingredient in meal.ingredient_set.all():
+                if ingredient.name in unique_ingredients:
+                    unique_ingredients[ingredient.name] += ingredient.amount
+                else:
+                    unique_ingredients[ingredient.name] = ingredient.amount
+        
+        # Loop through crazy meals and add ingredients
+        for crazy_meal in self.crazy_meal.all():
+            for ingredient in crazy_meal.ingredient:
+                if ingredient.name in unique_ingredients:
+                    unique_ingredients[ingredient.name] += ingredient.amount
+                else:
+                    unique_ingredients[ingredient.name] = ingredient.amount
+        
+        # Format ingredients into tuple
+        ingredients_tuple = tuple(f"{name}: {amount}" for name, amount in unique_ingredients.items())
+        
+        return ingredients_tuple
 
-        for meal in self.meals.all():
-            ingredients = meal.ingredients.split(',')  # Assuming ingredients are separated by commas
-            for ingredient in ingredients:
-                # Extract ingredient name and quantity (if provided)
-                parts = ingredient.strip().split(':')
-                name = parts[0].strip()
-                quantity = float(parts[1].strip()) if len(parts) > 1 else 1.0  # Default quantity is 1.0 if not provided
 
-                # Add ingredient to unique_ingredients dict
-                unique_ingredients[name] += quantity
 
-        return dict(unique_ingredients)
-    
 
     def get_absolute_url(self):
         return reverse("meal_plan_detail", kwargs={"pk": self.pk})

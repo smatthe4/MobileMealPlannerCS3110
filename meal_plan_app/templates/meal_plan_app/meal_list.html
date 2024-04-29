@@ -1,7 +1,7 @@
 <!-- inherit from base.html-->
 {% extends "meal_plan_app/base_template.html" %}
 {% load static %}
-{% load bootstrap5 %}
+{% load django_bootstrap5 %}
 
 <!-- Replace block content in base_template.html -->
 {% block content %}
@@ -29,6 +29,8 @@
         <p>No meal plan available.</p>
     {% endif %}
 </ul>
+
+<a href="{% url 'grocery_list' meal_plan.id %}"><button class="button">Make Grocery List</button></a>
 
 
   

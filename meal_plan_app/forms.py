@@ -6,6 +6,7 @@ from .models import Profile
 
 
 
+
 class MealPlanInfoForm(forms.Form):
     num_meals = forms.IntegerField(label='Number of meals', initial=1, min_value=1, max_value=7)
     category = forms.MultipleChoiceField(

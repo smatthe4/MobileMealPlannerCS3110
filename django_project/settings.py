@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'meal_plan_app',
     'multiselectfield',
-    'bootstrap5',
+    'django_bootstrap5',
     
 ]
 

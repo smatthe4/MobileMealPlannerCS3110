@@ -10,6 +10,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('meallist/', views.meal_list, name='meal_list'),
     path('profile/<int:profile_id>/updateProfile', views.updateProfile, name='update_profile'),
+    path('grocerylist/<int:meal_plan_id>', views.groceryList, name='grocery_list'),
 
     #user accounts
     path('accounts/', include('django.contrib.auth.urls')),
