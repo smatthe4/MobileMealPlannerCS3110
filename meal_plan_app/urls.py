@@ -9,7 +9,7 @@ urlpatterns = [
     # example in html <a href="{% url 'index' %}">Home</a>.
     path('', views.index, name='index'),
     path('meallist/', views.meal_list, name='meal_list'),
-
+    path('profile/<int:profile_id>/updateProfile', views.updateProfile, name='update_profile'),
 
     #user accounts
     path('accounts/', include('django.contrib.auth.urls')),

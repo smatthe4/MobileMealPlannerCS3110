@@ -6,11 +6,72 @@ from multiselectfield import MultiSelectField
 from django.utils import timezone
 
 
+
+
+
+class Profile(models.Model):
+    FOOD_PREFRENCES = [
+        ('vegan', 'Vegan'),
+        ('vegetarian', 'Vegetarian'),
+        ('pescatarian', 'Pescatarian'),
+        ('gluten_free', 'Gluten-Free'),
+        ('dairy_free', 'Dairy-Free'),
+    ]
+
+    food_preferences = MultiSelectField(choices=FOOD_PREFRENCES, max_length=55, null=True, blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)    
+
+
+    def get_absolute_url(self):
+        return reverse("profile", kwargs={"pk": self.pk})
+    
+    def __str__(self):
+        return self.user.username
+    
+
+ 
+
+class Meal(models.Model):
+
+
+    FOOD_PREFRENCES = [
+        ('vegan', 'Vegan'),
+        ('vegetarian', 'Vegetarian'),
+        ('pescatarian', 'Pescatarian'),
+        ('gluten_free', 'Gluten-Free'),
+        ('dairy_free', 'Dairy-Free'),
+    ]
+    title = models.CharField(max_length=100)
+    ingredients = models.TextField()  
+    instructions = models.TextField()
+    food_preferences = MultiSelectField(choices=FOOD_PREFRENCES,max_length=55, null=True, blank=True)
+
+
+    def get_absolute_url(self):
+        return reverse("meal_plan_detail", args=[str(self.id)])
+    
+    def __str__(self):
+        return self.title
+    
+
+
+
+class CrazyMeal(models.Model):
+    id_meal = models.CharField(max_length=10, unique=True)
+    name = models.CharField(max_length=255)
+    category = models.CharField(max_length=255)
+    instructions = models.TextField()
+    source_url = models.URLField()
+
+    def __str__(self):
+        return self.name
+
+
 class MealPlan(models.Model):
     title = models.DateField(default = timezone.now)
     meal = models.ManyToManyField('Meal')
     crazy_meal = models.ManyToManyField('CrazyMeal')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True)
 
 
     def get_unique_ingredients(self):
@@ -36,59 +97,5 @@ class MealPlan(models.Model):
     def __str__(self):
         return self.title
     
-    
+   
 
-class Meal(models.Model):
-
-
-    FOOD_PREFRENCES = [
-        ('vegan', 'Vegan'),
-        ('vegetarian', 'Vegetarian'),
-        ('pescatarian', 'Pescatarian'),
-        ('gluten_free', 'Gluten-Free'),
-        ('dairy_free', 'Dairy-Free'),
-    ]
-    title = models.CharField(max_length=100)
-    ingredients = models.TextField()  
-    instructions = models.TextField()
-    food_preferences = MultiSelectField(choices=FOOD_PREFRENCES,max_length=12, null=True, blank=True)
-
-
-    def get_absolute_url(self):
-        return reverse("meal_plan_detail", kwargs={"pk": self.pk})
-    
-    def __str__(self):
-        return self.title
-    
-
-
-
-class CrazyMeal(models.Model):
-    id_meal = models.CharField(max_length=10, unique=True)
-    name = models.CharField(max_length=255)
-    category = models.CharField(max_length=255)
-    instructions = models.TextField()
-    source_url = models.URLField()
-
-    def __str__(self):
-        return self.name
-
-
-
-class UserProfile(models.Model):
-    FOOD_PREFRENCES = [
-        ('vegan', 'Vegan'),
-        ('vegetarian', 'Vegetarian'),
-        ('pescatarian', 'Pescatarian'),
-        ('gluten_free', 'Gluten-Free'),
-        ('dairy_free', 'Dairy-Free'),
-        ('go_crazy', 'Go Crazy!'),
-    ]
-
-    food_preferences = MultiSelectField(choices=FOOD_PREFRENCES,max_length=12, null=True, blank=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    def get_absolute_url(self):
-        return reverse("meal_plan_detail", kwargs={"pk": self.pk})
-    
-    def __str__(self):
-        return f"Profile for {self.user.username}"

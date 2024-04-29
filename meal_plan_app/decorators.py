@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib import messages
-from .models import Organization
+from .models import Profile
 
 def allowed_users(allowed_roles=[]):
     def decorator(view_func):
@@ -24,12 +24,12 @@ def user_is_owner():
         def wrapper_func(request, *args, **kwargs):
             user = request.user
             
-           # organization = Organization.objects.get(user=user)
+            profile = Profile.objects.get(user=user)
 
-            #if user == organization.user:
-            #    return view_func(request, *args, **kwargs)
-          #  else:
-           #     messages.warning(request, 'You are not authorized to view this page')
-           #     return redirect('index')
+            if user == profile.user:
+                return view_func(request, *args, **kwargs)
+            else:
+                messages.warning(request, 'You are not authorized to view this page')
+                return redirect('index')
         return wrapper_func
     return decorator

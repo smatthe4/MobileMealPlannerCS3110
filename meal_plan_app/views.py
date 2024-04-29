@@ -9,6 +9,8 @@ from .forms import *
 from django.contrib import messages
 from django.http import JsonResponse
 import requests, random
+from django.contrib.auth.models import Group
+from .decorators import allowed_users, user_is_owner
 
 
 
@@ -17,6 +19,10 @@ import requests, random
 def index(request):
     form = MealPlanInfoForm()
     return render(request, 'meal_plan_app/index.html', {'form': form})
+
+def logoutView(request):
+    logout(request)
+    return render(request, 'registration/logout_complete.html')
 
 
 def meal_list(request):
@@ -63,7 +69,7 @@ def meal_list(request):
                 
             else:
                 # Retrieve meals from the database based on the selected category
-                meals = Meal.objects.filter(meal_type=category)
+                meals = Meal.objects.filter(food_preferences=category)
                 selected_meals = random.sample(list(meals), min(num_meals, len(meals)))
                 
                 # Create a meal plan instance
@@ -97,10 +103,10 @@ def registerPage(request):
       if form.is_valid():
          user = form.save()
          username = form.cleaned_data.get('username')
-        # group = UserProfile.objects.get(name='organization_role')
-         #user.groups.add(group)
-         organization = UserProfile.objects.create(user=user,)
-         organization.save()
+         group = Group.objects.get(name='regular_user')
+         user.groups.add(group)
+         userprofile = Profile.objects.create(user=user,)
+         userprofile.save()
 
          messages.success(request, 'Account was created for ' + username)
          return redirect('login')
@@ -112,40 +118,49 @@ def registerPage(request):
 
 
 @login_required(login_url='login')
-#@allowed_users(allowed_roles=['organization_role'])
-#@user_is_owner()
-def userPage(request):
-   organization = request.user.organization
-   form = UserProfileForm(instance = organization)
-   print('userProfile', UserProfile)
+@allowed_users(allowed_roles=['regular_user'])
+@user_is_owner()
+def updateProfile(request, profile_id):
+   profile = get_object_or_404(Profile, pk=profile_id)
+   
    if request.method == 'POST':
-      form = UserProfileForm(request.POST, request.FILES, instance=organization)
+      #Create a new dictionary with form data and group_id
+      profile_data = request.POST.copy()
+      profile_data['profile_id'] = profile_id
+      form = ProfileForm(request.POST, instance=profile)
+      if form.is_valid():
+         #Save the form without committing to the database
+         profile = form.save(commit=False)
+         #Set the group relationship
+         profile.profile = profile
+         profile.save()
+
+         #redirect back to the group detail page
+         return redirect('user_page')
+   else:
+      form = ProfileForm(instance=profile)
+
+   context = {'form': form, 'profile': profile}
+   return render(request, 'meal_plan_app/update_profile.html', context)
+
+
+
+
+
+
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['regular_user'])
+@user_is_owner()
+def userPage(request):
+   userProfile = request.user.profile
+   form = ProfileForm(instance = userProfile)
+   print('organization', userProfile)
+   if request.method == 'POST':
+      form = ProfileForm(request.POST, request.FILES, instance=userProfile)
       if form.is_vaild():
          form.save()
-   context = {'organization': organization, 'form':form}
-   return render(request, 'parent_resource_app/user.html', context)
+   context = {'userProfile': userProfile, 'form':form}
+   return render(request, 'meal_plan_app/user.html', context)
 
 
 
-
-def get_random_meal(request):
-        # API endpoint URL
-        api_url = 'https://www.themealdb.com/api/json/v1/1/random.php'
-
-        try:
-            # Make GET request to the API endpoint
-            response = requests.get(api_url)
-            # Check if request was successful (status code 200)
-            if response.status_code == 200:
-                # Parse JSON response
-                data = response.json()
-                # Extract meal data
-                meal = data['meals'][0]  # Assuming the response contains meal data
-                # Return JSON response with meal data
-                return JsonResponse({'meal': meal})
-            else:
-                # Return error response if request was not successful
-                return JsonResponse({'error': 'Failed to fetch data from API'}, status=500)
-        except Exception as e:
-            # Return error response if an exception occurs
-            return JsonResponse({'error': str(e)}, status=500)

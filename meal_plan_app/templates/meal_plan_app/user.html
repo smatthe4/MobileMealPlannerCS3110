@@ -1,0 +1,27 @@
+{% extends 'meal_plan_app/base_template.html' %}
+
+{% block content%}
+
+<h3>Welcome, {{ user.username }}! </h3><br>
+
+
+
+<br><h2>My Prefrences</h2><br>
+<div>
+    <p>{{ user.profile.food_preferences }}
+    </p>     
+</div><br>   
+<div class="card">
+    <p class="card-header">{{ user.profile.mealplan.name }} </p>
+    <div class="card-body">
+        <p class='card-text'>Email: {{ user.profile.mealplan.title }}</p>
+        <p class='card-text'>Phone: {{ user.profile.mealplan.title }}</p>
+        <p class='card-text'>About: {{ user.profile.mealplan.title }}</p>
+
+    </div>
+</div><br>
+    
+    
+<a href="{% url 'update_profile' user.profile.id %}"><button class="button">Edit Prefrences</button></a>
+
+{% endblock %}

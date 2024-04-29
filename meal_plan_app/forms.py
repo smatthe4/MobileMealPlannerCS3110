@@ -2,7 +2,7 @@ from django.forms import ModelForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
-from .models import UserProfile
+from .models import Profile
 
 
 
@@ -30,9 +30,9 @@ class MealPlanInfoForm(forms.Form):
 
 
 
-class UserProfileForm(ModelForm):
+class ProfileForm(ModelForm):
     class Meta:
-        model = UserProfile
+        model = Profile
         fields=['food_preferences']
 
         widgest = {
