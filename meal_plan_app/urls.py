@@ -11,6 +11,9 @@ urlpatterns = [
     path('meallist/', views.meal_list, name='meal_list'),
     path('profile/<int:profile_id>/updateProfile', views.updateProfile, name='update_profile'),
     path('grocerylist/<int:meal_plan_id>', views.groceryList, name='grocery_list'),
+    path('recipe/<int:meal_id>', views.MealDetailView.as_view(), name='meal_detail'),
+    path('c_recipe/<int:pk>', views.crazyRecipe, name='cmeal_detail'),
+
 
     #user accounts
     path('accounts/', include('django.contrib.auth.urls')),

@@ -14,16 +14,17 @@
         {% for meals in meal_plan.meal.all %}
             <h2>Day {{ day }}</h2>
             <ul>
-                <li>{{ meals.name }}</li>
+                <li><a aria-current="page" href="{% url 'meal_detail' meal.id %}"><button class="button">{{ meals.name }}</button></a></li>
             </ul>
         {% endfor %}
 
-        {% for meals in meal_plan.crazy_meal.all %}
-            <h2>Day {{ day }}</h2>
-            <ul>
-                <li>{{ meals.name }}</li>
-            </ul>
+        {% for crazy_meal in meal_plan.crazy_meal.all %}
+        <h2>Day {{ day }}</h2>
+        <ul>
+            <li><a aria-current="page" href="{% url 'cmeal_detail' crazy_meal.id %}"><button>{{ crazy_meal.name }}</button></a></li>
+        </ul>
         {% endfor %}
+    
 
     {% else %}
         <p>No meal plan available.</p>

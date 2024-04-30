@@ -1,21 +1,15 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     {% load django_bootstrap5 %}
-    
     {% bootstrap_css %}
     {% bootstrap_javascript %}
-
     <meta charset="UTF-8">
-    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
-    
-
     <title>Random Meal Generator</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
 
     <style>
         * {
@@ -25,9 +19,8 @@
         }
         
         body{
-            background: linear-gradient( rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
+            background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
         }
-
         
         html::-webkit-scrollbar {
             display: none;
@@ -64,7 +57,6 @@
             text-align: center;
             font-size: 24px;
             margin-bottom: 8px;
-        
         }
         
         .button-container {
@@ -75,7 +67,6 @@
         .content-text {
             padding: 8px;
         }
-        
         
         .recipe-card {
             background-color: rgba(203, 243, 240, 0.85);
@@ -106,6 +97,7 @@
         .tabs li.is-active a {
             color: #2EC4B6;
         }
+        
         .tabs li a {
             color: white;
             background-color: #2EC4B6;
@@ -116,53 +108,90 @@
                 font-size: 36px;
                 padding: 8px;
             }
-          }
-
-
-        .dropdown-item{
-            color: black;
-            background-color: red;
-            zindex-dropdown: 1000;
-
         }
         
-
+        .dropdown-item {
+            color: black;
+            background-color: red;
+            z-index: 1000;
+            display: none;
+            position: absolute;
+            background-color: white;
+            font-weight: bold;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 100;
+            position: fixed;
+        }
         
+        nav {
+            color: black;
+            font-weight: bold;
+            background-color: #898197;
+            display: inline-block;
+            text-align: left;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+        
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            user-select: none;
+        }
+        
+        .dropdown-content {
+            display: none;
+        }
+        
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
     </style>
 </head>
-
-<body>
-    <nav class="navbar">
-        <a class="navbar-brand" href="{% url 'index' %}"><img src="{% static 'images/meal_plan_logo.webp' %}" style="width:50px; height 50px"></a>
-        <div class="container-fluid">
-            <div class="dropdown-show">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown">ACCOUNT</button>
-                <div class="dropdown-menu navbarright" aria-labelledby="dropdownMenuButton">
-                    {% if user.is_authenticated %}
-                        <a class="dropdown-item" href="{% url 'user_page' %}">PROFILE</a>
-                        <a class="dropdown-item" href="{% url 'logout' %}">LOGOUT</a>
-                    {% else %}
-                        <a class="dropdown-item" href="{% url 'login' %}">LOGIN</a>
-                        <a class="dropdown-item" href="{% url 'register-page' %}">REGISTER</a>
-                    {% endif %}
-                </div>
-                
-            </div>            
+<body class="text-center">
+<nav class="navbar">
+    <a class="navbar-brand" href="{% url 'index' %}">
+        <img src="{% static 'images/meal_plan_logo.webp' %}" style="width:50px; height:50px">
+    </a>
+    <div class="dropdown show">
+        <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="dropdownMenuButton" data-toggle="dropdown">
+            ACCOUNT
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+            {% if user.is_authenticated %}
+                <a class="dropdown-item" href="{% url 'user_page' %}">PROFILE</a>
+                <a class="dropdown-item" href="{% url 'logout' %}">LOGOUT</a>
+            {% else %}
+                <a class="dropdown-item" href="{% url 'login' %}">LOGIN</a>
+                <a class="dropdown-item" href="{% url 'register-page' %}">REGISTER</a>
+            {% endif %}
         </div>
-    </nav>
+    </div>
 
-    
 
-    <div class="container-fluid" >
-        <div class="col-sm-10">
-          <!-- add block content from html template -->
-          {% block content %}
-          
-          {% endblock %}
-        </div>
+    <div class="dropdown">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
+          Dropdown button
+        </button>
+        <ul class="dropdown-menu">
+          <li><a class="dropdown-item" href="#">Link 1</a></li>
+          <li><a class="dropdown-item" href="#">Link 2</a></li>
+          <li><a class="dropdown-item" href="#">Link 3</a></li>
+        </ul>
+      </div>
 
-        
+
+</nav>
+<div class="container-fluid">
+    <div class="col-sm-10">
+        <!-- add block content from html template -->
+        {% block content %}
+        {% endblock %}
+    </div>
+</div>
 </body>
-
-
 </html>

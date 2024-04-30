@@ -1,0 +1,26 @@
+{% extends "meal_plan_app/base_template.html" %}
+{% load static %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+    <h1>Recipe</h1>
+    <ul>
+        <h1>Recipe</h1>
+        <h2>{{ meal.name }}</h2>
+        <p>{{ meal.description }}</p>
+        <p>Ingredients:</p>
+        <ul>
+            {% for ingredient, amount in zip(crazymeal.ingredients.split(','), crazymeal.ingredient_amount.split(',')) %}
+                <li>{{ ingredient }}: {{ amount }}</li>
+            {% endfor %}
+        </ul>
+        
+        <p>Instructions:</p>
+        <ul>
+            {% for instruction in crazymeal.instructions.split('.') %}
+                <li>{{ instruction.step }}</li>
+            {% endfor %}
+        </ul>
+    </ul>
+    <a href="{% url 'meal_list' %}"><button class="button">Back to Meal List</button></a>
+{% endblock %}

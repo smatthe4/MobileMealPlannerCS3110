@@ -13,7 +13,7 @@ from django.contrib.auth.models import Group
 from .decorators import allowed_users, user_is_owner
 from django.shortcuts import get_object_or_404
 from collections import defaultdict
-
+from django.views import generic
 
 
 
@@ -197,6 +197,27 @@ def userPage(request):
          form.save()
    context = {'userProfile': userProfile, 'form':form}
    return render(request, 'meal_plan_app/user.html', context)
+
+
+def crazyRecipe(request, pk):
+    crazymeal = CrazyMeal.objects.get(pk=pk)
+
+    ingredients = [ingredient.strip() for ingredient in crazymeal.ingredients.split(',')]
+    amounts = [amount.strip() for amount in crazymeal.ingredient_amount.split(',')]
+    ingredient_list = list(zip(ingredients, amounts))
+    
+
+    instructions = crazymeal.instructions.split('.')
+
+
+    context = {'crazy_meal': crazymeal, 'ingredient_list': ingredient_list, 'instructions': instructions}
+    return render(request, 'meal_plan_app/crazy_recipe.html', context)
+
+
+
+class MealDetailView(generic.DetailView):
+   model = Meal
+
 
 
 

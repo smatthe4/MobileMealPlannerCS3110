@@ -53,3 +53,6 @@ class CreateUserForm(UserCreationForm):
             'password2': forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Confirm Password'}),
         }   
 
+
+        
+

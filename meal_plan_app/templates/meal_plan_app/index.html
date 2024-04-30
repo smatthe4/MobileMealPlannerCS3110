@@ -5,6 +5,7 @@
 
 <!-- Replace block content in base_template.html -->
 {% block content %}
+<br><br>
     <!-- mealistwip.html -->
     <form method="POST" action="{% url 'meal_list' %}">
         {% csrf_token %}

@@ -66,6 +66,11 @@ class CrazyMeal(models.Model):
     instructions = models.TextField()
     source_url = models.URLField()
 
+
+
+    def get_absolute_url(self):
+        return reverse("meal_plan_detail", args=[str(self.id)])
+
     def __str__(self):
         return self.name
 

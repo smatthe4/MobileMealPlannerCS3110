@@ -1,0 +1,25 @@
+{% extends "meal_plan_app/base_template.html" %}
+{% load static %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+    <h1>Recipe</h1>
+    <ul>
+        <h2>{{ crazymeal.name }}</h2>
+        <p>Ingredients:</p>
+        <ul>
+            {% for ingredient, amount in ingredient_list %}
+                <li>{{ ingredient }}: {{ amount }}</li>
+            {% endfor %}
+        </ul>
+
+        <p>Instructions:</p>
+        <ol>
+            {% for instruction in instructions %}
+                <li>{{ instruction }}</li>
+            {% endfor %}
+        </ol>
+
+    </ul>
+    <a href="{% url 'meal_list' %}"><button class="button">Back to Meal List</button></a>
+{% endblock %}
