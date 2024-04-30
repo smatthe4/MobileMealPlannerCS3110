@@ -62,7 +62,7 @@ class CrazyMeal(models.Model):
     name = models.CharField(max_length=255)
     category = models.CharField(max_length=255)
     ingredients = models.TextField()
-    ingredient_amount = models.TextField()
+    ingredient_amount = models.TextField(default='')
     instructions = models.TextField()
     source_url = models.URLField()
 
@@ -82,25 +82,27 @@ class MealPlan(models.Model):
         
         # Loop through meals and add ingredients
         for meal in self.meal.all():
-            for ingredient in meal.ingredient_set.all():
-                if ingredient.name in unique_ingredients:
-                    unique_ingredients[ingredient.name] += ingredient.amount
+            for ingredient_line, amount_line in zip(meal.ingredients.split(','), meal.ingredient_amount.split(',')):
+                name = ingredient_line.strip()  # Assuming each line contains only the ingredient name
+                amount = amount_line.strip()    # Assuming each line contains only the ingredient amount
+                ingredient_obj = {'name': name, 'amount': amount}
+                if ingredient_obj['name'] in unique_ingredients:
+                    unique_ingredients[ingredient_obj['name']] += ingredient_obj['amount']
                 else:
-                    unique_ingredients[ingredient.name] = ingredient.amount
-        
+                    unique_ingredients[ingredient_obj['name']] = ingredient_obj['amount']
+
         # Loop through crazy meals and add ingredients
         for crazy_meal in self.crazy_meal.all():
-            for ingredient in crazy_meal.ingredient:
-                if ingredient.name in unique_ingredients:
-                    unique_ingredients[ingredient.name] += ingredient.amount
+            for ingredient_line, amount_line in zip(crazy_meal.ingredients.split(','), crazy_meal.ingredient_amount.split(',')):
+                name = ingredient_line.strip()  # Assuming each line contains only the ingredient name
+                amount = amount_line.strip()    # Assuming each line contains only the ingredient amount
+                ingredient_obj = {'name': name, 'amount': amount}
+                if ingredient_obj['name'] in unique_ingredients:
+                    unique_ingredients[ingredient_obj['name']] += ingredient_obj['amount']
                 else:
-                    unique_ingredients[ingredient.name] = ingredient.amount
+                    unique_ingredients[ingredient_obj['name']] = ingredient_obj['amount']
         
-        # Format ingredients into tuple
-        ingredients_tuple = tuple(f"{name}: {amount}" for name, amount in unique_ingredients.items())
-        
-        return ingredients_tuple
-
+        return unique_ingredients
 
 
 
