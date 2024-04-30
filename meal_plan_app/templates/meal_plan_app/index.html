@@ -9,7 +9,7 @@
     <!-- mealistwip.html -->
     <form method="POST" action="{% url 'meal_list' %}">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form }}
         <button type="submit">Generate Meal Plan</button>
     </form>
 

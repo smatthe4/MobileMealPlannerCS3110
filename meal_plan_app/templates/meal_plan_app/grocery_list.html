@@ -3,11 +3,24 @@
 {% load django_bootstrap5 %}
 
 {% block content %}
-    <h1>Grocery List</h1>
-    <ul>
-        <!-- Loop through the unique ingredients list -->
+<link href="{% static 'css/grocery_list.css' %}" rel="stylesheet">
+<link href="{% static 'css/base.css' %}" rel="stylesheet">
+
+<br><h1>Grocery List</h1>
+
+    <div class="inbox">
         {% for ingredient, amount in unique_ingredients_list %}
-            <li>{{ ingredient }}: {{ amount }}</li>
+            <div class="item">
+                <input type="checkbox">
+                    <p>{{ ingredient }}: {{ amount }}</p>
+            </div>
         {% endfor %}
-    </ul>
+    </div>
+  
+  
+  
+    <a href="{% url 'meal_list' %}"><button class="button">Back to Meal List</button></a>
+  <script>
+  </script>
+
 {% endblock %}
