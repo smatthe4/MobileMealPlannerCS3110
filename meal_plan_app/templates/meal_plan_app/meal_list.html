@@ -8,20 +8,20 @@
 
 <!-- meal_plan_detail.html -->
 <h1>Generated Meal Plan</h1>
-<ul>
+<ul style="list-style: none;">
     <!-- <h1>Meal Plan</h1> -->
     {% if meal_plan %}
         {% for meals in meal_plan.meal.all %}
         
             <h2>Day {{ day }}</h2>
-            <ul>
+            <ul style="list-style: none;">
                 <li><a aria-current="page" href="{% url 'meal_detail' meal.id %}"><button class="button">{{ meals.name }}</button></a></li>
             </ul>
         {% endfor %}
 
         {% for crazy_meal in meal_plan.crazy_meal.all %}
         <h2>Day {{ day }}</h2>
-        <ul>
+        <ul style="list-style: none;">
             <li><a aria-current="page" href="{% url 'cmeal_detail' crazy_meal.id %}"><button>{{ crazy_meal.name }}</button></a></li>
         </ul>
         {% endfor %}
