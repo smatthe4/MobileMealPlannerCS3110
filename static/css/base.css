@@ -125,9 +125,12 @@ nav {
     user-select: none;
 }
 
-.dropdown-content {
+.dropdown-item {
     z-index: 1000;
+
 }
+
+
 
 @media (min-width: 768px) {
     .bd-placeholder-img-lg {

@@ -1,49 +1,45 @@
+<!-- inherit from base.html -->
 {% extends 'meal_plan_app/base_template.html' %}
-{% load django_bootstrap5 %}
-{% load static %}
+
 {% block content %}
 
-<link href="{% static 'css/login.css' %}" rel="stylesheet">
+  <!-- doesn't work correctly - do not want to do all messages-->
+  {% for message in messages %}
+    <p>{{message}}</p>
+  {% endfor %}
 
-<div class="container-fluid">
-<div class="form-signin">
-  <form method="post" action="{% url 'login' %}" class="form-floating">
+  {% if form.errors %}
+    <p>Your username and password didn't match. Please try again.</p>
+  {% endif %}
+
+  {% if next %}
+    {% if user.is_authenticated %}
+      <p>Your account doesn't have access to this page. To proceed,
+      please login with an account that has access.</p>
+    {% else %}
+      <p>Please login to see this page.</p>
+    {% endif %}
+  {% endif %}
+
+  <form method="post" action="{% url 'login' %}">
     {% csrf_token %}
-
-    <h1 class="h3 mb-3 fw-normal" style="color:white;">Please sign in</h1>
-
-    <div class=" form-control">
-      <label for="floatingInput">{{ form.username.label_tag }}</label>
-      {{ form.username }}
-    </div>
-    <div class=" form-control">
-      <label for="{{ form.password.label_tag }}"></label>
-      {{form.password }}
-    </div>
-
-    <div class="checkbox mb-3">
-      <label>
-        <input type="checkbox" value="remember-me"> Remember me
-      </label>
-    </div>
-    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-  
-    
-    {% if form.errors %}
-      <p>Your username and password didn't match. Please try again.</p>
-    {% endif %}
-    
-    {% if next %}
-      {% if user.is_authenticated %}
-        <p>Your account doesn't have access to this page. To proceed, please login with an account that has access.</p>
-      {% else %}
-        <p>Please login to see this page.</p>
-      {% endif %}
-    {% endif %}
+    <table>
+      <tr>
+        <td>{{ form.username.label_tag }}</td>
+        <td>{{ form.username }}</td>
+      </tr>
+      <tr> 
+        <td>{{ form.password.label_tag }}</td>
+        <td>{{ form.password }}</td>
+      </tr>
+    </table>
+    <input type="submit" value="login">
+    <input type="hidden" name="next" value="{{ next }}">
   </form>
+ 
 
+  {# Assumes you setup the password_reset view in your URLconf #}
   <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
   <p><a href="{% url 'register-page' %}">Register Here</a></p>
-</main>
-</div>
+ 
 {% endblock %}
