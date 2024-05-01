@@ -15,16 +15,14 @@
 
 </head>
 <body>
-<nav class="navbar">
-    <a class="navbar-brand" href="{% url 'index' %}">
-        <img src="{% static 'images/meal_plan_logo.webp' %}" style="width:50px; height:50px">
-    </a>
 
-    <div class="dropdown">
-        <button class="btn btn-primary dropdown-toggle btn-sm" data-bs-toggle="dropdown">
-            <img src="{% static 'images/account_icon.webp' %}" style="width:50px; height:50px">
-        </button>
-        <ul class="dropdown-menu">
+
+    
+<nav class="navbar">
+    <a href="{% url 'index' %}">College Meal Planner</a> <!-- ADD URL TO INDEX-->
+
+
+    <div class="navbarright"> 
             {% if user.is_authenticated %}
                 <li><a class="dropdown-item" href="{% url 'user_page' %}">PROFILE</a></li>
                 <li><a class="dropdown-item" href="{% url 'logout' %}">LOGOUT</a></li>
@@ -32,17 +30,41 @@
                 <a class="dropdown-item" href="{% url 'login' %}">LOGIN</a>
                 <a class="dropdown-item" href="{% url 'register-page' %}">REGISTER</a>
             {% endif %}
-        </ul>
-      </div>
-
-
+    </div>
 </nav>
+
+</div> 
+<div style="padding-top:50px"> 
+</div>
+ 
+
+    <div style="color:white; text-align:center; font-size: 50px; padding-top:50px;  background-color: white; background-image:url('https://wallpapercave.com/wp/wp10193108.jpg');   font-weight: 50;
+    text-shadow: 2px 2px black;"> 
+
+        Make Your Meal Plan!
+    
+    </div> 
+
+
+    <div style="padding-top:50px"> 
+    </div>
+
+<div style="text-align:center; font-size: 50px; padding-top:5px;    "> 
 <div class="container-fluid">
-    <div class="col-sm-10">
+
         <!-- add block content from html template -->
         {% block content %}
         {% endblock %}
-    </div>
+   
 </div>
+
+<div style="padding-top:50px"> 
+</div>
+<img style="width: 100%; height: 200px; object-fit: cover;" src="https://wallpapers.com/images/hd/cooking-background-dg5u6vitzfnv3mrw.jpg" alt="Trulli" width="500" height="333">
+</div>
+
+
+
+
 </body>
 </html>

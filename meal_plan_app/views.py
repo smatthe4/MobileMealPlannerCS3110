@@ -107,6 +107,9 @@ def meal_list(request):
         else:
             form = MealPlanInfoForm()
             return render(request, 'meal_plan_app/index.html', {'form': form})
+        
+
+
 
 
 
