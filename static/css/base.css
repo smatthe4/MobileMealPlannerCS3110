@@ -3,20 +3,18 @@ body {
   margin: 0; 
 
   font-family: fantasy; 
-
+background-color:#ede9dd;
     color: white;
     text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-background-color:#292929;
+
 } 
     .navbar { 
-background-image:url('https://herbalreboot.com/wp-content/uploads/2020/06/shop-page-image-scaled.jpg');
-background-repeat: no-repeat;
 
+background-color: #829c52;
 
 
         overflow: hidden; 
 
-background-color:white;
   	
 
 
@@ -56,6 +54,8 @@ text-shadow: 2px 2px black;
   font-weight: 50;
 text-shadow: 2px 2px black;
 
+background-color: #465237;
+
     } 
 
 
@@ -66,9 +66,9 @@ h1 {
     font-size: 48px;
     color: white;
     text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+	background-color: #465237;
 
-	background-image:url('https://t4.ftcdn.net/jpg/01/84/26/95/360_F_184269531_YBEiKECRlGl0Y6Gnwhb2pB1lLhCD0cVO.jpg');
-}
+
 
 h2 {
     font-size: 16px;
@@ -76,14 +76,14 @@ h2 {
     color: white;
     text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
     padding: 8px;
-background-image:url('https://st2.depositphotos.com/5262887/10893/i/450/depositphotos_108930862-Dark-wooden-texture-Background-brown-old-wood-planks.jpg');
-}
+background-color: #ede9dd;
+
 
 h3 {
     text-align: center;
     font-size: 24px;
     margin-bottom: 8px;
-background-image:url('https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTA5L3Jhd3BpeGVsb2ZmaWNlNl93b29kZW5fdGV4dHVyZWRfZDczY2FkZGMtNjExZS00YTc0LWEyYTQtYzEzMjBjMmZhNzU0XzEuanBn.jpg');
+background-color: #ede9dd;
 }
 
 
@@ -101,9 +101,8 @@ background-image:url('https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFn
 
 
 button {
-	background-image:url('https://images.rawpixel.com/image_800/cHJpdmF0ZS9sci9pbWFnZXMvd2Vic2l0ZS8yMDIzLTA5L3Jhd3BpeGVsb2ZmaWNlNl93b29kZW5fdGV4dHVyZWRfZDczY2FkZGMtNjExZS00YTc0LWEyYTQtYzEzMjBjMmZhNzU0XzEuanBn.jpg');
-text-shadow: 2px 2px black;
-color:white;
+	background-color: #829c52;
+
 }
 
 
