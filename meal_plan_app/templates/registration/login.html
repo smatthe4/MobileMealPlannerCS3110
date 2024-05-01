@@ -5,6 +5,7 @@
 
 <link href="{% static 'css/login.css' %}" rel="stylesheet">
 
+<div class="container-fluid">
 <div class="form-signin">
   <form method="post" action="{% url 'login' %}" class="form-floating">
     {% csrf_token %}
@@ -44,5 +45,5 @@
   <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
   <p><a href="{% url 'register-page' %}">Register Here</a></p>
 </main>
-
+</div>
 {% endblock %}
