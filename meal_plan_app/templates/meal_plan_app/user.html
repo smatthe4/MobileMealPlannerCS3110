@@ -1,27 +1,25 @@
 {% extends 'meal_plan_app/base_template.html' %}
 {% load django_bootstrap5 %}
-{% block content%}
+{% block content %}
 
 <h3>Welcome, {{ user.username }}! </h3><br>
 
-
-
-<br><h2>My Prefrences</h2><br>
+<br><h2>My Preferences</h2><br>
 <div>
-    <p>{{ user.profile.food_preferences }}
-    </p>     
-</div><br>   
-<div class="card">
-    <p class="card-header">{{ user.profile.mealplan.name }} </p>
-    <div class="card-body">
-        <p class='card-text'>Email: {{ user.profile.mealplan.title }}</p>
-        <p class='card-text'>Phone: {{ user.profile.mealplan.title }}</p>
-        <p class='card-text'>About: {{ user.profile.mealplan.title }}</p>
-
-    </div>
+    <p>{{ user.profile.food_preferences }}</p>     
 </div><br>
-    
-    
-<a href="{% url 'update_profile' user.profile.id %}"><button class="button">Edit Prefrences</button></a>
+
+{% for meal_plan in user.profile.meal_pla.all %}
+    <div class="card">
+        <p class="card-header">{{ meal_plan.title }}</p>
+        <div class="card-body">
+            {% for meal in meal_plan.meal_set.all %}
+                <p class='card-text'>{{ meal.name }}</p>
+            {% endfor %}
+        </div>
+    </div><br>
+{% endfor %}
+
+<a href="{% url 'update_profile' user.profile.id %}"><button class="button">Edit Preferences</button></a>
 
 {% endblock %}

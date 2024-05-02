@@ -5,22 +5,21 @@
 {% block content %}
     <h1>Recipe</h1>
     <ul>
-        <h1>Recipe</h1>
         <h2>{{ meal.name }}</h2>
-        <p>{{ meal.description }}</p>
         <p>Ingredients:</p>
         <ul>
-            {% for ingredient, amount in zip(crazymeal.ingredients.split(','), crazymeal.ingredient_amount.split(',')) %}
+            {% for ingredient, amount in ingredient_list %}
                 <li>{{ ingredient }}: {{ amount }}</li>
             {% endfor %}
         </ul>
-        
+
         <p>Instructions:</p>
-        <ul>
-            {% for instruction in crazymeal.instructions.split('.') %}
-                <li>{{ instruction.step }}</li>
+        <ol>
+            {% for instruction in instructions %}
+                <li>{{ instruction }}</li>
             {% endfor %}
-        </ul>
+        </ol>
+
     </ul>
     <a href="{% url 'meal_list' %}"><button class="button">Back to Meal List</button></a>
 {% endblock %}

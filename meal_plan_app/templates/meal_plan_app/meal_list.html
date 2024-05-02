@@ -14,7 +14,7 @@
         {% for meals in meal_plan.meal.all %}
             <h2>Day {{ day }}</h2>
             <ul>
-                <li><a aria-current="page" href="{% url 'meal_detail' meal.id %}"><button class="button">{{ meals.name }}</button></a></li>
+                <li><a aria-current="page" href="{% url 'meal_detail' meals.id %}"><button class="button">{{ meals.title }}</button></a></li>
             </ul>
         {% endfor %}
 
@@ -24,14 +24,19 @@
             <li><a aria-current="page" href="{% url 'cmeal_detail' crazy_meal.id %}"><button>{{ crazy_meal.name }}</button></a></li>
         </ul>
         {% endfor %}
-    
-
     {% else %}
         <p>No meal plan available.</p>
     {% endif %}
 </ul>
 
+
+
 <a href="{% url 'grocery_list' meal_plan.id %}"><button class="button">Make Grocery List</button></a>
+<form action="{% url 'save_to_profile' %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="meal_plan_id" value="{{ meal_plan.id }}">
+    <button type="submit" class="button">Save to Profile</button>
+</form>
 
 
   

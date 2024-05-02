@@ -14,6 +14,7 @@ from .decorators import allowed_users, user_is_owner
 from django.shortcuts import get_object_or_404
 from collections import defaultdict
 from django.views import generic
+from django.shortcuts import redirect
 
 
 
@@ -26,21 +27,39 @@ def logoutView(request):
     logout(request)
     return render(request, 'registration/logout_complete.html')
 
-
-
-
+@login_required(login_url='login')
+@allowed_users(allowed_roles=['regular_user'])
+def save_to_profile(request):
+    if request.method == 'POST':
+        meal_plan_id = request.POST.get('meal_plan_id')
+        if meal_plan_id:
+            try:
+                meal_plan = MealPlan.objects.get(id=meal_plan_id)
+                # Assuming the user is authenticated, you can access the user through request.user
+                user_profile = Profile.objects.get(user=request.user)
+                user_profile.meal_plan = meal_plan
+                user_profile.save()
+                messages.success(request, 'Meal plan saved to your profile successfully.')
+            except MealPlan.DoesNotExist:
+                messages.error(request, 'Meal plan not found.')
+            except Profile.DoesNotExist:
+                messages.error(request, 'User profile not found.')
+        else:
+            messages.error(request, 'Invalid request.')
+    return redirect('meal_list')
 
 
 def meal_list(request):
     if request.method == 'POST':
         form = MealPlanInfoForm(request.POST)
-    
         if form.is_valid():
             go_crazy = form.cleaned_data['go_crazy']
             num_meals = form.cleaned_data['num_meals']
             category = form.cleaned_data['category']
 
-            
+            # Create a meal plan instance
+            meal_plan = MealPlan.objects.create()
+
             if go_crazy:
                 crazy_meals = []
                 for _ in range(num_meals):
@@ -53,61 +72,40 @@ def meal_list(request):
                             data = response.json()
                             # Extract meal data
                             meal_data = data['meals'][0]  # Assuming the response contains meal data
-                            # Create CrazyMeal instance
-                            crazy_meal = CrazyMeal(
-                            id_meal=meal_data['idMeal'],
-                            name=meal_data['strMeal'],
-                            category=meal_data['strCategory'],
-                            instructions=meal_data['strInstructions'],
-                            source_url=meal_data['strSource']
-                        )
-
-                            # Build ingredients and ingredient amounts
-                            ingredients = [meal_data[f'strIngredient{i}'] for i in range(1, 21) if meal_data.get(f'strIngredient{i}')]
-                            ingredient_amounts = [meal_data[f'strMeasure{i}'] for i in range(1, 21) if meal_data.get(f'strMeasure{i}')]
-
-                            # Convert lists to strings
-                            crazy_meal.ingredients = ', '.join(ingredients)
-                            crazy_meal.ingredient_amount = ', '.join(ingredient_amounts)
-                                                    # Save the CrazyMeal instance to the database
-                            crazy_meal.save()
+                            # Check if the meal already exists in the database
+                            if CrazyMeal.objects.filter(id_meal=meal_data['idMeal']).exists():
+                                crazy_meal = CrazyMeal.objects.get(id_meal=meal_data['idMeal'])
+                            else:
+                                # Create CrazyMeal instance
+                                crazy_meal = CrazyMeal.objects.create(
+                                    id_meal=meal_data['idMeal'],
+                                    name=meal_data['strMeal'],
+                                    category=meal_data['strCategory'],
+                                    instructions=meal_data['strInstructions'],
+                                    source_url=meal_data['strSource'],
+                                    ingredients=', '.join([meal_data[f'strIngredient{i}'] for i in range(1, 21) if meal_data.get(f'strIngredient{i}')]),
+                                    ingredient_amount=', '.join([meal_data[f'strMeasure{i}'] for i in range(1, 21) if meal_data.get(f'strMeasure{i}')]),
+                                )
                             crazy_meals.append(crazy_meal)
                     except Exception as e:
                         # Handle exceptions, such as API errors
                         print(f"Error creating CrazyMeal: {e}")
 
-
-                            
-                    # Create a meal plan instance
-                    meal_plan = MealPlan.objects.create()
-                    meal_plan.crazy_meal.add(*crazy_meals)
-                    
-            else:
+                # Add crazy meals to the meal plan
+                meal_plan.crazy_meal.add(*crazy_meals)
+            if not go_crazy:
                 # Retrieve meals from the database based on the selected category
-                meals = Meal.objects.filter(food_preferences=category)
+                meals = Meal.objects.all()
                 selected_meals = random.sample(list(meals), min(num_meals, len(meals)))
-                
-                # Create a meal plan instance
-                meal_plan = MealPlan.objects.create()
+                # Add selected meals to the meal plan
                 meal_plan.meal.add(*selected_meals)
 
-
-
-            # Optionally, associate the meal plan with the current user
-            if request.user.is_authenticated:
-                meal_plan.user = request.user
-                meal_plan.save()
-
-
-
-        
             # Render the generated meal plan
             return render(request, 'meal_plan_app/meal_list.html', {'meal_plan': meal_plan})
 
-        else:
-            form = MealPlanInfoForm()
-            return render(request, 'meal_plan_app/index.html', {'form': form})
-
+    else:
+        form = MealPlanInfoForm()
+    return render(request, 'meal_plan_app/index.html', {'form': form})
 
 
 def groceryList(request, meal_plan_id):
@@ -122,8 +120,6 @@ def groceryList(request, meal_plan_id):
 
     # Render the grocery list template and pass the unique ingredients list
     return render(request, 'meal_plan_app/grocery_list.html', {'unique_ingredients_list': unique_ingredients_list})
-
-
 
 
 def logoutView(request):
@@ -150,7 +146,6 @@ def registerPage(request):
    context = {'form': form}
    return render(request, 'registration/register.html', context)
 
- 
 
 
 @login_required(login_url='login')
@@ -199,6 +194,20 @@ def userPage(request):
    return render(request, 'meal_plan_app/user.html', context)
 
 
+def recipe(request, pk):
+    meal = Meal.objects.get(pk=pk)
+
+    ingredients = [ingredient.strip() for ingredient in meal.ingredients.split(',')]
+    amounts = [amount.strip() for amount in meal.ingredient_amount.split(',')]
+    ingredient_list = list(zip(ingredients, amounts))
+    
+
+    instructions = meal.instructions.split('.')
+
+
+    context = {'meal': meal, 'ingredient_list': ingredient_list, 'instructions': instructions}
+    return render(request, 'meal_plan_app/recipe.html', context)
+
 def crazyRecipe(request, pk):
     crazymeal = CrazyMeal.objects.get(pk=pk)
 
@@ -213,10 +222,6 @@ def crazyRecipe(request, pk):
     context = {'crazy_meal': crazymeal, 'ingredient_list': ingredient_list, 'instructions': instructions}
     return render(request, 'meal_plan_app/crazy_recipe.html', context)
 
-
-
-class MealDetailView(generic.DetailView):
-   model = Meal
 
 
 

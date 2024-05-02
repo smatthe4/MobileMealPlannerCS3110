@@ -12,7 +12,7 @@
         {% for ingredient, amount in unique_ingredients_list %}
             <div class="item">
                 <input type="checkbox">
-                    <p>{{ ingredient }}: {{ amount }}</p>
+                    <p>{{ amount }}: <strong>{{ ingredient }}</strong></p>
             </div>
         {% endfor %}
     </div>
