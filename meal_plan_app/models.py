@@ -25,7 +25,7 @@ class Meal(models.Model):
 
 
     def get_absolute_url(self):
-        return reverse("meal_plan_detail", args=[str(self.id)])
+        return reverse("meal_detail", args=[str(self.id)])
     
     def __str__(self):
         return self.title
@@ -45,7 +45,7 @@ class CrazyMeal(models.Model):
 
 
     def get_absolute_url(self):
-        return reverse("meal_plan_detail", args=[str(self.id)])
+        return reverse("cmeal_detail", args=[str(self.id)])
 
     def __str__(self):
         return self.name

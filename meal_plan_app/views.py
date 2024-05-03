@@ -15,18 +15,22 @@ from django.shortcuts import get_object_or_404
 from collections import defaultdict
 from django.views import generic
 from django.shortcuts import redirect
+from django.views.decorators.csrf import csrf_exempt
 
 
 
 # Create your views here.
+@csrf_exempt
 def index(request):
     form = MealPlanInfoForm()
     return render(request, 'meal_plan_app/index.html', {'form': form})
 
+@csrf_exempt
 def logoutView(request):
     logout(request)
     return render(request, 'registration/logout_complete.html')
 
+@csrf_exempt
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['regular_user'])
 def save_to_profile(request):
@@ -48,7 +52,7 @@ def save_to_profile(request):
             messages.error(request, 'Invalid request.')
     return redirect('meal_list')
 
-
+@csrf_exempt
 def meal_list(request):
     if request.method == 'POST':
         form = MealPlanInfoForm(request.POST)
@@ -107,7 +111,7 @@ def meal_list(request):
         form = MealPlanInfoForm()
     return render(request, 'meal_plan_app/index.html', {'form': form})
 
-
+@csrf_exempt
 def groceryList(request, meal_plan_id):
     # Retrieve the MealPlan instance
     meal_plan = get_object_or_404(MealPlan, pk=meal_plan_id)
@@ -121,12 +125,12 @@ def groceryList(request, meal_plan_id):
     # Render the grocery list template and pass the unique ingredients list
     return render(request, 'meal_plan_app/grocery_list.html', {'unique_ingredients_list': unique_ingredients_list})
 
-
+@csrf_exempt
 def logoutView(request):
     logout(request)
     return render(request, 'registration/logout_complete.html')
 
-
+@csrf_exempt
 def registerPage(request):
    form = CreateUserForm()
 
@@ -147,7 +151,7 @@ def registerPage(request):
    return render(request, 'registration/register.html', context)
 
 
-
+@csrf_exempt
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['regular_user'])
 @user_is_owner()
@@ -178,7 +182,7 @@ def updateProfile(request, profile_id):
 
 
 
-
+@csrf_exempt
 @login_required(login_url='login')
 @allowed_users(allowed_roles=['regular_user'])
 @user_is_owner()
@@ -193,7 +197,7 @@ def userPage(request):
    context = {'userProfile': userProfile, 'form':form}
    return render(request, 'meal_plan_app/user.html', context)
 
-
+@csrf_exempt
 def recipe(request, pk):
     meal = Meal.objects.get(pk=pk)
 
@@ -207,7 +211,7 @@ def recipe(request, pk):
 
     context = {'meal': meal, 'ingredient_list': ingredient_list, 'instructions': instructions}
     return render(request, 'meal_plan_app/recipe.html', context)
-
+@csrf_exempt
 def crazyRecipe(request, pk):
     crazymeal = CrazyMeal.objects.get(pk=pk)
 
